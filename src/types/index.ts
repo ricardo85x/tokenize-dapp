@@ -4,9 +4,11 @@
 export type { ERC20 } from "./ERC20";
 export type { IERC20Metadata } from "./IERC20Metadata";
 export type { IERC20 } from "./IERC20";
+export type { Crowdsale } from "./Crowdsale";
 export type { MyToken } from "./MyToken";
 
 export { ERC20__factory } from "./factories/ERC20__factory";
 export { IERC20Metadata__factory } from "./factories/IERC20Metadata__factory";
 export { IERC20__factory } from "./factories/IERC20__factory";
+export { Crowdsale__factory } from "./factories/Crowdsale__factory";
 export { MyToken__factory } from "./factories/MyToken__factory";
