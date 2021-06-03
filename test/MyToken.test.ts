@@ -10,16 +10,12 @@ const { deployContract } = waffle;
 import MyTokenArtifact from "../client/src/artifacts/contracts/MyToken.sol/MyToken.json"
 import { MyToken as MyTokenProps } from "../src/types/MyToken"
 
-import MyTokenSaleArtifact from "../client/src/artifacts/contracts/MyTokenSale.sol/MyTokenSale.json"
-import { MyTokenSale as MyTokenSaleProps } from "../src/types/MyTokenSale"
-
 
 describe("Token test", async () => {
 
     let myToken: MyTokenProps;
-    let myTokenSale: MyTokenSaleProps;
 
-    const TOTALTOKENS = 1000;
+    const INITIAL_TOKENS_SUPPLY = process.env.INITIAL_TOKEN_SUPPLY;
 
     let [deployerAccount, recipient, anotherAccount] = ["","",""]
 
@@ -36,22 +32,9 @@ describe("Token test", async () => {
             await deployContract(
                 signers[0], 
                 MyTokenArtifact, 
-                [TOTALTOKENS]
+                [INITIAL_TOKENS_SUPPLY]
             )
         ) as MyTokenProps;
-
-        myTokenSale = await deployContract(
-            signers[0],
-            MyTokenSaleArtifact,
-            [
-                1, 
-                signers[0].getAddress(), 
-                myToken.address
-            ]
-        ) as MyTokenSaleProps;
-
-        // await myToken.transfer(myTokenSale.address, TOTALTOKENS);
-
 
     })
 

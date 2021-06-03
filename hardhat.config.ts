@@ -3,6 +3,8 @@ import '@typechain/hardhat'
 import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-waffle'
 import { task } from "hardhat/config";
+import * as dotenv from "dotenv";
+dotenv.config()
 
 task("migrate", "migrate the tokens", async () => {
 
