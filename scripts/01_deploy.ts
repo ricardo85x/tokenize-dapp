@@ -11,8 +11,13 @@ async function main() {
     const MyToken = await hre.ethers.getContractFactory("MyToken");
     const myToken = await MyToken.deploy(INITIAL_TOKEN_SUPPLY);
 
+
+    const KycContract = await hre.ethers.getContractFactory("KycContract ");
+    const kycContract = await KycContract.deploy();
+     
+
     const MyTokenSale = await hre.ethers.getContractFactory("MyTokenSale");
-    const myTokenSale = await MyTokenSale.deploy(1, signers[0].getAddress(), myToken.address);
+    const myTokenSale = await MyTokenSale.deploy(1, signers[0].getAddress(), myToken.address, kycContract.address);
 
     await myToken.deployed();
     await myTokenSale.deployed();

@@ -5,21 +5,23 @@ chai.use(chaiAsPromised);
 const { expect } = chai;
 
 import { ethers, waffle } from "hardhat";
+
 const { deployContract } = waffle
 
 import MyTokenArtifact from "../client/src/artifacts/contracts/MyToken.sol/MyToken.json"
 import { MyToken as MyTokenProps } from "../src/types/MyToken"
 
+import KycContractArtifact from "../client/src/artifacts/contracts/KycContract.sol/KycContract.json"
+import { KycContract as KycContractProps } from "../src/types/KycContract"
+
 import MyTokenSaleArtifact from "../client/src/artifacts/contracts/MyTokenSale.sol/MyTokenSale.json"
 import { MyTokenSale as MyTokenSaleProps } from "../src/types/MyTokenSale"
 
-
-describe("TokenSale test", async () => {
+describe("My TokenSale tests", async () => {
 
     let myToken: MyTokenProps;
+    let myKycContract: KycContractProps;
     let myTokenSale: MyTokenSaleProps;
-
-
 
     let [deployerAccount, recipient, anotherAccount] = ["","",""]
 
@@ -38,10 +40,15 @@ describe("TokenSale test", async () => {
             [process.env.INITIAL_TOKEN_SUPPLY]
         ) as MyTokenProps
 
+        myKycContract = await deployContract(
+            signers[0], 
+            KycContractArtifact
+        ) as KycContractProps
+
         myTokenSale = await deployContract(
             signers[0],
             MyTokenSaleArtifact,
-            [1, deployerAccount, myToken.address]
+            [1, deployerAccount, myToken.address, myKycContract.address]
         ) as MyTokenSaleProps
 
         await myToken.transfer(myTokenSale.address,Number(process.env.INITIAL_TOKEN_SUPPLY))
@@ -58,10 +65,18 @@ describe("TokenSale test", async () => {
         expect(balanceOnSalesSmartcontract).to.be.equal(totalSupply);
     })
 
+    it("should not be possible to buy tokens without KYC", async () => {
+
+        const TOKENS_TO_BUY = 1;
+        expect(myTokenSale.buyTokens(deployerAccount, {value: TOKENS_TO_BUY})).to.eventually.be.rejected;
+
+    })
+
     it("should be possible to buy tokens", async () => {
 
         const TOKENS_TO_BUY = 1;
 
+        await myKycContract.setKycCompleted(deployerAccount)
         const balanceBefore = await myToken.balanceOf(deployerAccount);
         await expect(myTokenSale.buyTokens(deployerAccount, {value: TOKENS_TO_BUY})).to.eventually.be.fulfilled;
         expect(myToken.balanceOf(deployerAccount)).to.eventually.be.equal(balanceBefore.add(TOKENS_TO_BUY));
