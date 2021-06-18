@@ -126,13 +126,16 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
         listenToTokenTransfer: async function(_contract: MyTokenProps, _account: string, fromBlock: number) {
 
             const eventFromUser = _contract.filters.Transfer(null, _account)
-    
+            
+
             _contract.on(eventFromUser, (...args: any[]) => {
                 const currentBlock = args[args.length - 1].blockNumber as number;
                 if (currentBlock > fromBlock) {
                     contextValue.updateUserTokens(_contract, _account, args[2])
                 }
             })
+
+
         },
 
         listenToTokenSupply: async function(_myTokenContract: MyTokenProps, _myTokenSaleContract: MyTokenSaleProps, fromBlock: number) {
@@ -141,7 +144,7 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
     
                 const currentBlock = args[args.length - 1].blockNumber as number;
                 if (currentBlock > fromBlock) {
-                    console.log("listenToTokenSupply:", args);
+                    // console.log("listenToTokenSupply:", args);
                     contextValue.updateCurrentSupply(_myTokenContract)
                 }
             })
@@ -162,8 +165,7 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
 
             const provider = new ethers.providers.Web3Provider(window.ethereum)
 
-            console.log("NETWORK", await provider.getNetwork())
-            console.log("ENV", process.env)
+        
 
             const valid_network = process.env.NEXT_PUBLIC_VALID_NETWORK ? 
                 process.env.NEXT_PUBLIC_VALID_NETWORK : 
@@ -204,6 +206,12 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
                 contextValue.setKycContract(_kycContract);
 
                 // event listeners
+
+                // remove events
+
+                _myTokenContract.removeAllListeners()
+                _myTokenSaleContract.removeAllListeners()
+
                 contextValue.listenToTokenTransfer(_myTokenContract, accounts[0], await provider.getBlockNumber())
                 contextValue.listenToTokenSupply(_myTokenContract, _myTokenSaleContract, await provider.getBlockNumber())
 

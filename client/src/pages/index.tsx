@@ -12,8 +12,6 @@ function Home() {
 
   const { accounts, isOwner, loaded, inList } = useBaseContext()
 
-  console.log("contas", accounts)
-
   if (!loaded) return (<>
     <Text>Loading web3...</Text>
     <ToastContainer />

@@ -20,8 +20,6 @@ export function ClubComponent() {
 
       const address = _address ? _address : accounts[0]
 
-      console.log("adddd", address)
-
       try {
         const allowed = await kycContract.kycCompleted(address);
 
