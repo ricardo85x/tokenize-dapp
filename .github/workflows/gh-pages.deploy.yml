@@ -34,7 +34,6 @@ jobs:
         working-directory: "./client"
       - name: Deploy out dir to branch gh-pages
         uses: JamesIves/github-pages-deploy-action@4.1.1
-        working-directory: "./client"
         with:
           branch: gh-pages
-          folder: out
+          folder: client/out
