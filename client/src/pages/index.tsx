@@ -14,7 +14,7 @@ function Home() {
 
   console.log("contas", accounts)
 
-  if (!loaded) return (<Text>Loading web3... Oi</Text>)
+  if (!loaded) return (<Text>Loading web3...</Text>)
 
   return (
     <Flex
