@@ -12,6 +12,7 @@ import {
   BaseContract,
   ContractTransaction,
   Overrides,
+  PayableOverrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -21,18 +22,24 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface KycContractInterface extends ethers.utils.Interface {
   functions: {
+    "buyKyc()": FunctionFragment;
     "kycCompleted(address)": FunctionFragment;
+    "kycPrice()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setKycCompleted(address)": FunctionFragment;
+    "setKycPrice(uint256)": FunctionFragment;
     "setKycRevoked(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "withdrawKyc()": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "buyKyc", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "kycCompleted",
     values: [string]
   ): string;
+  encodeFunctionData(functionFragment: "kycPrice", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -43,6 +50,10 @@ interface KycContractInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
+    functionFragment: "setKycPrice",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setKycRevoked",
     values: [string]
   ): string;
@@ -50,11 +61,17 @@ interface KycContractInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "withdrawKyc",
+    values?: undefined
+  ): string;
 
+  decodeFunctionResult(functionFragment: "buyKyc", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "kycCompleted",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "kycPrice", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -65,6 +82,10 @@ interface KycContractInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setKycPrice",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setKycRevoked",
     data: BytesLike
   ): Result;
@@ -72,11 +93,17 @@ interface KycContractInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawKyc",
+    data: BytesLike
+  ): Result;
 
   events: {
+    "KycPurchased(address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "KycPurchased"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
 
@@ -124,7 +151,13 @@ export class KycContract extends BaseContract {
   interface: KycContractInterface;
 
   functions: {
+    buyKyc(
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     kycCompleted(_addr: string, overrides?: CallOverrides): Promise<[boolean]>;
+
+    kycPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -137,6 +170,11 @@ export class KycContract extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setKycPrice(
+      _amountInWei: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setKycRevoked(
       _addr: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -146,9 +184,19 @@ export class KycContract extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    withdrawKyc(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
+  buyKyc(
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   kycCompleted(_addr: string, overrides?: CallOverrides): Promise<boolean>;
+
+  kycPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -158,6 +206,11 @@ export class KycContract extends BaseContract {
 
   setKycCompleted(
     _addr: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setKycPrice(
+    _amountInWei: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -171,8 +224,16 @@ export class KycContract extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  withdrawKyc(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
+    buyKyc(overrides?: CallOverrides): Promise<void>;
+
     kycCompleted(_addr: string, overrides?: CallOverrides): Promise<boolean>;
+
+    kycPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -180,15 +241,30 @@ export class KycContract extends BaseContract {
 
     setKycCompleted(_addr: string, overrides?: CallOverrides): Promise<void>;
 
+    setKycPrice(
+      _amountInWei: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setKycRevoked(_addr: string, overrides?: CallOverrides): Promise<void>;
 
     transferOwnership(
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    withdrawKyc(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
+    KycPurchased(
+      from?: null,
+      value?: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { from: string; value: BigNumber }
+    >;
+
     OwnershipTransferred(
       previousOwner?: string | null,
       newOwner?: string | null
@@ -199,7 +275,13 @@ export class KycContract extends BaseContract {
   };
 
   estimateGas: {
+    buyKyc(
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     kycCompleted(_addr: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    kycPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -212,6 +294,11 @@ export class KycContract extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setKycPrice(
+      _amountInWei: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setKycRevoked(
       _addr: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -221,13 +308,23 @@ export class KycContract extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    withdrawKyc(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    buyKyc(
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     kycCompleted(
       _addr: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    kycPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -240,6 +337,11 @@ export class KycContract extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setKycPrice(
+      _amountInWei: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     setKycRevoked(
       _addr: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -247,6 +349,10 @@ export class KycContract extends BaseContract {
 
     transferOwnership(
       newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    withdrawKyc(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

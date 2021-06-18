@@ -8,13 +8,13 @@ import { ethers, waffle } from "hardhat";
 
 const { deployContract } = waffle
 
-import MyTokenArtifact from "../client/src/artifacts/contracts/MyToken.sol/MyToken.json"
+import MyTokenArtifact from "../src/artifacts/contracts/MyToken.sol/MyToken.json"
 import { MyToken as MyTokenProps } from "../src/types/MyToken"
 
-import KycContractArtifact from "../client/src/artifacts/contracts/KycContract.sol/KycContract.json"
+import KycContractArtifact from "../src/artifacts/contracts/KycContract.sol/KycContract.json"
 import { KycContract as KycContractProps } from "../src/types/KycContract"
 
-import MyTokenSaleArtifact from "../client/src/artifacts/contracts/MyTokenSale.sol/MyTokenSale.json"
+import MyTokenSaleArtifact from "../src/artifacts/contracts/MyTokenSale.sol/MyTokenSale.json"
 import { MyTokenSale as MyTokenSaleProps } from "../src/types/MyTokenSale"
 
 describe("My TokenSale tests", async () => {
@@ -37,7 +37,7 @@ describe("My TokenSale tests", async () => {
         myToken = await deployContract(
             signers[0],
             MyTokenArtifact,
-            [process.env.INITIAL_TOKEN_SUPPLY]
+            []
         ) as MyTokenProps
 
         myKycContract = await deployContract(
@@ -50,6 +50,10 @@ describe("My TokenSale tests", async () => {
             MyTokenSaleArtifact,
             [1, deployerAccount, myToken.address, myKycContract.address]
         ) as MyTokenSaleProps
+
+        await myToken.addMinter(myTokenSale.address)
+
+        await myToken.mint(deployerAccount, Number(process.env.INITIAL_TOKEN_SUPPLY))
 
         await myToken.transfer(myTokenSale.address,Number(process.env.INITIAL_TOKEN_SUPPLY))
 

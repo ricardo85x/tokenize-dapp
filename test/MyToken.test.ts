@@ -7,15 +7,13 @@ const { expect } = chai;
 import { ethers, waffle } from "hardhat"
 const { deployContract } = waffle;
 
-import MyTokenArtifact from "../client/src/artifacts/contracts/MyToken.sol/MyToken.json"
+import MyTokenArtifact from "../src/artifacts/contracts/MyToken.sol/MyToken.json"
 import { MyToken as MyTokenProps } from "../src/types/MyToken"
 
 
 describe("Token test", async () => {
 
     let myToken: MyTokenProps;
-
-    const INITIAL_TOKENS_SUPPLY = process.env.INITIAL_TOKEN_SUPPLY;
 
     let [deployerAccount, recipient, anotherAccount] = ["","",""]
 
@@ -32,9 +30,11 @@ describe("Token test", async () => {
             await deployContract(
                 signers[0], 
                 MyTokenArtifact, 
-                [INITIAL_TOKENS_SUPPLY]
+                []
             )
         ) as MyTokenProps;
+
+        await myToken.mint(deployerAccount, Number(process.env.INITIAL_TOKEN_SUPPLY))
 
     })
 

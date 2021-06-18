@@ -2,8 +2,14 @@ import { HardhatUserConfig } from "hardhat/types";
 import '@typechain/hardhat'
 import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-waffle'
+
+import 'hardhat-deploy';
+import 'hardhat-deploy-ethers';
+
 import { task } from "hardhat/config";
 import * as dotenv from "dotenv";
+
+
 dotenv.config()
 
 task("migrate", "migrate the tokens", async () => {
@@ -14,8 +20,12 @@ task("migrate", "migrate the tokens", async () => {
 
 const config: HardhatUserConfig = {
   solidity: "0.8.0",
+  namedAccounts: {
+    deployer: 0
+  },
   paths: {
-    artifacts: "client/src/artifacts"
+    artifacts: "src/artifacts",
+    deployments: "client/src/hardhat-deploy"
   },
   typechain: {
     outDir: 'src/types',
@@ -24,11 +34,17 @@ const config: HardhatUserConfig = {
   networks: {
     ganache: {
       url: "HTTP://127.0.0.1:7545",
-      accounts: [
-        "fec3b3ba780468ca379f4384dde546e9852b7f012696a25d7dc61001c15b349d",
-        "9eb590444041bc02bf5bfa1954730ded8f4319799d13cf0c71a6ef00d632ba28",
-        "ff4c29e2698102f99579aa3ddd0879b2b07b664b0df8519f0148e6498683f427"
-      ]
+      saveDeployments: true,
+      accounts: {
+        mnemonic: process.env.MNEMONIC
+      }
+    },
+    ropsten: {
+      url: process.env.INFURA_ROPSTEN_HTTPS_ENDPOINT,
+      saveDeployments: true,
+      accounts: {
+        mnemonic: process.env.MNEMONIC
+      }
     }
   }
 };

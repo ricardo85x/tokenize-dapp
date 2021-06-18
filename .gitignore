@@ -1,6 +1,8 @@
 node_modules
-# client/src/artifacts/build-info
+client/src/hardhat-deploy/**/solcinputs
+client/src/hardhat-deploy/**/.chainId
+
 # client/src/artifacts/@openzeppelin
 # *.dbg.json
-client/src/artifacts
+# client/src/artifacts
 .env

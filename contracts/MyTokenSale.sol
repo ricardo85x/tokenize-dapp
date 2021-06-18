@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./Crowdsale.sol";
+// import "./Crowdsale.sol";
 
 import "./KycContract.sol";
 
-contract MyTokenSale is Crowdsale {
+import "./mint/MintedCrowdsale.sol";
+
+contract MyTokenSale is MintedCrowdsale {
 
 
     KycContract kyc;
@@ -16,6 +18,7 @@ contract MyTokenSale is Crowdsale {
         IERC20 token,
         KycContract _kyc
     )
+        MintedCrowdsale()
         Crowdsale(rate, wallet, token)
     {
         kyc = _kyc;
@@ -26,5 +29,6 @@ contract MyTokenSale is Crowdsale {
         require(kyc.kycCompleted(msg.sender), "KYC not completed, purchase not allowed");
 
     }
+
 
 }
