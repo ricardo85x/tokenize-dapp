@@ -19,7 +19,6 @@ function Home() {
 
   return (
     <Flex
-      maxW={1400}
       w="100%"
       h="100vh"
       mh="auto"
