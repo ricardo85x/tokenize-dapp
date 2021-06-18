@@ -20,6 +20,8 @@ jobs:
         with:
           path: '**/**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/**/yarn.lock') }}
+      - name: Install packages base
+        run: yarn
       - name: Install packages
         run: yarn
         working-directory: "./client"
