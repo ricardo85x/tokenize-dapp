@@ -2,12 +2,12 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { theme } from "../styles/theme"
 import {BaseContextProvider} from '../contexts/BaseContext';
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, props }) {
   return  (
 
     <ChakraProvider resetCSS theme={theme}>
 
-      <BaseContextProvider >
+      <BaseContextProvider  >
         <Component {...pageProps} />
       </BaseContextProvider>
       
@@ -16,6 +16,7 @@ function MyApp({ Component, pageProps }) {
 
   )
 }
+
 
 export default MyApp
 

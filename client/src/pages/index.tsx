@@ -14,7 +14,10 @@ function Home() {
 
   console.log("contas", accounts)
 
-  if (!loaded) return (<Text>Loading web3...</Text>)
+  if (!loaded) return (<>
+    <Text>Loading web3...</Text>
+    <ToastContainer />
+  </>)
 
   return (
     <Flex

@@ -1,3 +1,5 @@
+import { GetServerSideProps } from 'next'
+
 import { useCallback, useEffect, createContext, ReactNode, useContext, useState } from "react"
 
 import { Web3Provider, ethers } from "../lib/getWeb3"
@@ -160,6 +162,31 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
 
             const provider = new ethers.providers.Web3Provider(window.ethereum)
 
+            console.log("NETWORK", await provider.getNetwork())
+            console.log("ENV", process.env)
+
+            const valid_network = process.env.NEXT_PUBLIC_VALID_NETWORK ? 
+                process.env.NEXT_PUBLIC_VALID_NETWORK : 
+                "ropsten"
+
+            const network = await provider.getNetwork()
+
+            if (network.name !== valid_network) {
+
+                toast.error(`🪲 Invalid Network!, Change to ${valid_network.toUpperCase()} and reload the page`, {
+                    position: "top-right",
+                    autoClose: 10000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                return;
+            }
+
+
+
             const accounts = await window.ethereum.request!({ method: 'eth_requestAccounts' });
 
             if (provider && accounts) {
@@ -220,3 +247,5 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
 }
 
 export const useBaseContext = () => useContext(BaseContext)
+
+

@@ -4,7 +4,7 @@ import { useBaseContext } from "../contexts/BaseContext"
 export function Header() {
 
     const {
-        accounts, inList, myTokenBalance
+        accounts, inList, myTokenBalance, tokenSymbol
     } = useBaseContext()
 
     const address = accounts ?
@@ -23,7 +23,7 @@ export function Header() {
                 align="center"
                 maxW={1100}
             >
-                <Text fontSize="34" fontWeight="bold">Pog Token Sale</Text>
+                <Text fontSize="34" fontWeight="bold">{tokenSymbol} Token Sale</Text>
 
                 <Flex bg="black" p="3" borderRadius="10" fontWeight="bold" align="flex-end" justify="center" direction="column">
                     <Text fontSize="15" >{address}</Text>
