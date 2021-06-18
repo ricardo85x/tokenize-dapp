@@ -17,9 +17,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Use cache files to setup yarn
         uses: actions/cache@v2
-        working-directory: "./client"
         with:
-          path: '**/node_modules'
+          path: './client/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install packages
         run: yarn
