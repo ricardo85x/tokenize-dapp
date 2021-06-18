@@ -6,7 +6,7 @@ import { ethers } from 'ethers'
 
 export function BuyTokenComponent() {
 
-    const {  currentSupply, tokenSymbol, accounts, tokenRate,  myTokenSaleContract } = useBaseContext()
+    const {  currentSupply, tokenSymbol, accounts, tokenRate,  myTokenSaleContract, myTokenContract } = useBaseContext()
     const { register, handleSubmit } = useForm()
 
 
@@ -18,6 +18,32 @@ export function BuyTokenComponent() {
           })
         }
       }
+    
+    const handleAddTokenMetamask =  async () => {
+
+      if (window.ethereum) {
+        const wasAdded = await (window.ethereum as any).request({
+          method: 'wallet_watchAsset',
+          params: {
+            type: 'ERC20',
+            options: {
+              address: myTokenContract.address, // The address that the token is at.
+              symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
+              decimals: 0, // The number of decimals in the token
+           //   image: 'https://github.com/ricardo85x.png', // A string url of the token logo
+            },
+          },
+        });
+
+      
+      }
+
+      
+
+      
+    }
+
+
 
     return (
         <VStack fontWeight="bold" spacing="5" align="flex-start">
@@ -35,6 +61,9 @@ export function BuyTokenComponent() {
             <Text fontSize="14" color="red.300">Token value in ETH: {ethers.utils.formatUnits(tokenRate, "ether")}</Text>
 
             <Text fontSize="14" color="green.300">Address to send wei: {myTokenSaleContract && myTokenSaleContract.address}</Text>
+
+
+            <Button colorScheme="orange" onClick={() => handleAddTokenMetamask() }>Add {tokenSymbol} to Metamask</Button>
 
         </VStack>
     )
