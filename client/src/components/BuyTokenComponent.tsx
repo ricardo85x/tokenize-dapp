@@ -34,7 +34,7 @@ export function BuyTokenComponent() {
             <Text>You can also send weis to the following address to obtain tokens</Text>
             <Text fontSize="14" color="red.300">Token value in ETH: {ethers.utils.formatUnits(tokenRate, "ether")}</Text>
 
-            <Text fontSize="14" color="green.300">Address to send wei: {myTokenSaleContract?.address}</Text>
+            <Text fontSize="14" color="green.300">Address to send wei: {myTokenSaleContract && myTokenSaleContract.address}</Text>
 
         </VStack>
     )
