@@ -2,9 +2,9 @@ import { useCallback, useEffect, createContext, ReactNode, useContext, useState 
 
 import { Web3Provider, ethers } from "../lib/getWeb3"
 
-import MyToken from "../hardhat-deploy/ganache/MyToken.json";
-import MyTokenSale from "../hardhat-deploy/ganache/MyTokenSale.json";
-import Kyc from "../hardhat-deploy/ganache/KycContract.json";
+import MyToken from "../hardhat-deploy/ropsten/MyToken.json";
+import MyTokenSale from "../hardhat-deploy/ropsten/MyTokenSale.json";
+import Kyc from "../hardhat-deploy/ropsten/KycContract.json";
 
 import { MyToken as MyTokenProps } from "../../../src/types/MyToken"
 import { MyTokenSale as MyTokenSaleProps } from "../../../src/types/MyTokenSale"
@@ -168,9 +168,9 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
                 contextValue.setAccounts(accounts)
 
                 const signer = provider.getSigner();
-                const _kycContract = new ethers.Contract(Kyc.address, Kyc.abi, signer) as KycProps
-                const _myTokenSaleContract = new ethers.Contract(MyTokenSale.address, MyTokenSale.abi, signer) as MyTokenSaleProps
-                const _myTokenContract = new ethers.Contract(MyToken.address, MyToken.abi, signer) as MyTokenProps
+                const _kycContract = new ethers.Contract(Kyc.address, Kyc.abi, signer) as any as  KycProps
+                const _myTokenSaleContract = new ethers.Contract(MyTokenSale.address, MyTokenSale.abi, signer) as any as  MyTokenSaleProps
+                const _myTokenContract = new ethers.Contract(MyToken.address, MyToken.abi, signer) as any as  MyTokenProps
 
                 contextValue.setMyTokenContract(_myTokenContract);
                 contextValue.setMyTokenSaleContract(_myTokenSaleContract);

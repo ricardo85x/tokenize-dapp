@@ -68,11 +68,11 @@ export function ClubComponent() {
   }
 
   return (
-    <VStack spacing="5" align="flex-start" fontWeight="bold">
+    <VStack spacing="5" fontWeight="bold" align="flex-start" >
 
 
       {!inList && (
-        <VStack as="form" onSubmit={handleSubmit(handleAddMySelf)} spacing="2" >
+        <VStack align="flex-start"  as="form" onSubmit={handleSubmit(handleAddMySelf)} spacing="2" >
           <Text >{message}</Text>
           <Button size="lg" colorScheme="blackAlpha" type="submit">Join Club</Button>
           {!isOwner && <Text fontSize="12" color="red.300"> * Only {clubRate} wei </Text>}

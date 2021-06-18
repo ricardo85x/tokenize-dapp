@@ -19,9 +19,9 @@ export function Header() {
         >
             <Flex
                 justify="space-between"
-                p="15"
+                py="15"
                 align="center"
-                maxW={1030}
+                maxW={1100}
             >
                 <Text fontSize="34" fontWeight="bold">Pog Token Sale</Text>
 

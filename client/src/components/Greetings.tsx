@@ -13,10 +13,7 @@ export function Greetings( ) {
         message = "Hello Traveler your are in the club!"
     }
     
-    return (
-       
-            <Text fontWeight="bold" color="blue.500">{message}</Text>
-
-        
+    return ( 
+       <Text fontWeight="bold" color="blue.500">{message}</Text> 
     )
 }

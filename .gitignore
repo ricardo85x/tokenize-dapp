@@ -1,6 +1,7 @@
 node_modules
 client/src/hardhat-deploy/**/solcinputs
 client/src/hardhat-deploy/**/.chainId
+client_react
 
 # client/src/artifacts/@openzeppelin
 # *.dbg.json
