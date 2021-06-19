@@ -5,8 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./mint/ERC20Mintable.sol";
 
 contract MyToken is ERC20Mintable {
-    constructor() ERC20("Super Pog Cappucino Token", "SPC2") {
-        
+    constructor() ERC20("Super Ric Token", "RIC") {
     }
 
     // This token is not divisible, so 0 decimals    

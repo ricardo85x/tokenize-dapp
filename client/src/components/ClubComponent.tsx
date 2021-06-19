@@ -35,13 +35,6 @@ export function ClubComponent() {
             await kycContract.buyKyc({ value: clubRate })
           }
 
-
-          toast.info(`${littleAddress} addeded in the list`);
-
-          if (accounts && address === accounts[0]) {
-            setInList(true)
-          }
-
         }
 
       } catch (err) {

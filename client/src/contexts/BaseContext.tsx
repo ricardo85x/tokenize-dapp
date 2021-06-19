@@ -1,5 +1,3 @@
-import { GetServerSideProps } from 'next'
-
 import { useCallback, useEffect, createContext, ReactNode, useContext, useState } from "react"
 
 import { Web3Provider, ethers } from "../lib/getWeb3"
@@ -58,6 +56,10 @@ interface BaseContextDataProps {
 
     myTokenBalance: number;
     setMyTokenBalance: (_myTokenBalance: number) => void;
+
+    
+    listenJoinClub: (_contract: KycProps, _account: string, fromBlock: number) => void;
+
 
     listenToTokenTransfer: (_contract: MyTokenProps, _account: string, fromBlock: number) => void;
     listenToTokenSupply: (_myTokenContract: MyTokenProps, _myTokenSaleContract: MyTokenSaleProps, fromBlock: number) => void;
@@ -123,6 +125,21 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
             }
         },
 
+        listenJoinClub: async function(_contract: KycProps, _account: string, fromBlock: number) {
+            
+
+            _contract.on('KycPurchased', (...args: any[]) => {
+                const currentBlock = args[args.length - 1].blockNumber as number;
+                if (currentBlock > fromBlock && _account.toLowerCase() === args[0].toLowerCase()) {
+
+                    toast.info('You just entered the Club!');
+                    contextValue.setInList(true)
+                } 
+            })
+
+
+        },
+
         listenToTokenTransfer: async function(_contract: MyTokenProps, _account: string, fromBlock: number) {
 
             const eventFromUser = _contract.filters.Transfer(null, _account)
@@ -144,7 +161,6 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
     
                 const currentBlock = args[args.length - 1].blockNumber as number;
                 if (currentBlock > fromBlock) {
-                    // console.log("listenToTokenSupply:", args);
                     contextValue.updateCurrentSupply(_myTokenContract)
                 }
             })
@@ -161,21 +177,27 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
 
     const connectWeb3 = useCallback(async () => {
 
+
+
         if (!contextValue.loaded && !!contextValue.owner && !!window.ethereum && !accounts) {
 
             const provider = new ethers.providers.Web3Provider(window.ethereum)
 
-        
-
             const valid_network = process.env.NEXT_PUBLIC_VALID_NETWORK ? 
                 process.env.NEXT_PUBLIC_VALID_NETWORK : 
-                "ropsten"
+                "3"
+
 
             const network = await provider.getNetwork()
 
-            if (network.name !== valid_network) {
+        
+            if (network.chainId.toString() !== valid_network) {
 
-                toast.error(`🪲 Invalid Network!, Change to ${valid_network.toUpperCase()} and reload the page`, {
+                const network_name = valid_network === "3" ? "ropsten" : 
+                                     valid_network === "1" ? "mainnet" :
+                                     valid_network === "1337" ? "ganache" : "unknown"
+
+                toast.error(`🪲 Invalid Network!, Change to ${network_name.toUpperCase()} and reload the page`, {
                     position: "top-right",
                     autoClose: 10000,
                     hideProgressBar: false,
@@ -184,10 +206,10 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
                     draggable: true,
                     progress: undefined,
                 });
+
+
                 return;
             }
-
-
 
             const accounts = await window.ethereum.request!({ method: 'eth_requestAccounts' });
 
@@ -212,8 +234,10 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
                 _myTokenContract.removeAllListeners()
                 _myTokenSaleContract.removeAllListeners()
 
+                contextValue.listenJoinClub(_kycContract, accounts[0], await provider.getBlockNumber())
                 contextValue.listenToTokenTransfer(_myTokenContract, accounts[0], await provider.getBlockNumber())
                 contextValue.listenToTokenSupply(_myTokenContract, _myTokenSaleContract, await provider.getBlockNumber())
+
 
                 //
                 contextValue.setTokenSymbol(await _myTokenContract.symbol())

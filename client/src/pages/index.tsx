@@ -10,7 +10,7 @@ import { MineTokenComponent } from "../components/MineTokenComponent";
 
 function Home() {
 
-  const { accounts, isOwner, loaded, inList } = useBaseContext()
+  const { accounts, isOwner, loaded, inList, myTokenContract } = useBaseContext()
 
   if (!loaded) return (<>
     <Text>Loading web3...</Text>
@@ -33,6 +33,8 @@ function Home() {
         <Greetings />
 
         {inList && <BuyTokenComponent />}
+
+        
 
         <ClubComponent />
 
