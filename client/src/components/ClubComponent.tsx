@@ -35,10 +35,15 @@ export function ClubComponent() {
             await kycContract.buyKyc({ value: clubRate })
           }
 
+          toast.info("Transaction sent, waiting confirmation to join the club")
+
+
         }
 
       } catch (err) {
         toast.error(`Error to process this address or you are not allowed`);
+        console.error("Error to process this address or you are not allowed`",err)
+
       }
 
     }

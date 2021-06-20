@@ -2,27 +2,34 @@ import { VStack, Text, Input, Button } from "@chakra-ui/react"
 import { useBaseContext } from "../contexts/BaseContext"
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { ethers } from 'ethers'
-
+import { toast } from "react-toastify"
 
 export function BuyTokenComponent() {
 
     const {  currentSupply, tokenSymbol, accounts, tokenRate,  myTokenSaleContract, myTokenContract } = useBaseContext()
     const { register, handleSubmit } = useForm()
 
-
     const handleBuyTokens: SubmitHandler<{tokens: number}> = async (data) => {
 
         if (data.tokens > 0 && accounts && myTokenSaleContract) {
-          myTokenSaleContract.buyTokens(accounts[0], {
-            value: ethers.BigNumber.from(data.tokens),
-          })
+
+          try {
+            await myTokenSaleContract.buyTokens(accounts[0], {
+              value: ethers.BigNumber.from(data.tokens),
+            })
+            toast.info("Transaction sent, balance will updated once confirmed")
+          } catch (err) {
+            toast.error("Error sending transaction")
+            console.error("Error sending transaction",err)
+
+          }
         }
       }
     
     const handleAddTokenMetamask =  async () => {
 
       if (window.ethereum) {
-        const wasAdded = await (window.ethereum as any).request({
+        await (window.ethereum as any).request({
           method: 'wallet_watchAsset',
           params: {
             type: 'ERC20',
@@ -35,15 +42,9 @@ export function BuyTokenComponent() {
           },
         });
 
-      
       }
 
-      
-
-      
     }
-
-
 
     return (
         <VStack fontWeight="bold" spacing="5" align="flex-start">
@@ -61,7 +62,6 @@ export function BuyTokenComponent() {
             <Text fontSize="14" color="red.300">Token value in ETH: {ethers.utils.formatUnits(tokenRate, "ether")}</Text>
 
             <Text fontSize="14" color="green.300">Address to send wei: {myTokenSaleContract && myTokenSaleContract.address}</Text>
-
 
             <Button colorScheme="orange" onClick={() => handleAddTokenMetamask() }>Add {tokenSymbol} to Metamask</Button>
 

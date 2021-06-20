@@ -1,6 +1,7 @@
 import { VStack, Text, Input, Button } from "@chakra-ui/react"
 import { useBaseContext } from "../contexts/BaseContext"
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from "react-toastify"
 
 
 export function MineTokenComponent() {
@@ -12,7 +13,19 @@ export function MineTokenComponent() {
     const handleMineTokens: SubmitHandler<{tokens: number}> = async (data) => {
 
         if (data.tokens > 0 && accounts && myTokenContract && myTokenSaleContract) {
-          myTokenContract.mint(myTokenSaleContract.address ,data.tokens)
+
+          try {
+            await myTokenContract.mint(myTokenSaleContract.address ,data.tokens)
+
+            toast.info("Transaction sent, token will be minted once confirmed")
+
+          } catch (err) {
+            toast.error(`Error on token mint`);
+            console.error("Error on token mint",err)
+
+          }
+
+
         }
       }
 

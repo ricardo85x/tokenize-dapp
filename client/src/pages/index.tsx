@@ -1,4 +1,4 @@
-import { Flex, Text, VStack } from '@chakra-ui/react'
+import { Flex, Text, VStack, Box } from '@chakra-ui/react'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Header } from "../components/Header";
@@ -7,15 +7,16 @@ import { ClubComponent } from "../components/ClubComponent";
 import { useBaseContext } from "../contexts/BaseContext";
 import { BuyTokenComponent } from "../components/BuyTokenComponent";
 import { MineTokenComponent } from "../components/MineTokenComponent";
+import { ErrorWeb3 } from "../components/ErrorWeb3"
 
 function Home() {
 
-  const { accounts, isOwner, loaded, inList, myTokenContract } = useBaseContext()
+  const { accounts, isOwner, loaded, loadedOk, inList, myTokenContract } = useBaseContext()
 
-  if (!loaded) return (<>
-    <Text>Loading web3...</Text>
-    <ToastContainer />
-  </>)
+  if (!loaded) return <ErrorWeb3 message="Loading web3..." />
+  
+  if (!loadedOk) return <ErrorWeb3 message="Error loading dApp" error />
+
 
   return (
     <Flex
