@@ -19,6 +19,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     log: true,
   });
 
+  await deploy('UserTokens', {
+    from: deployer,
+    args: [],
+    log: true,
+  });
+
+
   const kycContract = await deploy('KycContract', {
     from: deployer,
     args: [],
@@ -47,4 +54,4 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 };
 export default func;
-func.tags = ['MyToken', 'KycContract', 'MyTokenSale' ];
+func.tags = ['MyToken', 'KycContract', 'MyTokenSale', 'userTokens' ];
