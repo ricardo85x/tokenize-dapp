@@ -33,7 +33,7 @@ export function Header() {
                         ) : (
                             <Text fontSize="12" mr="1" color="red.500">not approved</Text>
                         )}
-                        <Text fontSize="12" color="blue.500">{myTokenBalance} SPX</Text>
+                        <Text fontSize="12" color="blue.500">{myTokenBalance} {tokenSymbol}</Text>
                     </Flex>
                 </Flex>
 
