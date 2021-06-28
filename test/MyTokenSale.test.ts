@@ -9,6 +9,7 @@ import { ethers, waffle } from "hardhat";
 const { deployContract } = waffle
 
 import MyTokenArtifact from "../src/artifacts/contracts/MyToken.sol/MyToken.json"
+
 import { MyToken as MyTokenProps } from "../src/types/MyToken"
 
 import KycContractArtifact from "../src/artifacts/contracts/KycContract.sol/KycContract.json"
@@ -37,7 +38,7 @@ describe("My TokenSale tests", async () => {
         myToken = await deployContract(
             signers[0],
             MyTokenArtifact,
-            []
+            ["Ric Token", "RIC", 0]
         ) as MyTokenProps
 
         myKycContract = await deployContract(

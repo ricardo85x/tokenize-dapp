@@ -13,6 +13,8 @@ contract KycContract is Ownable{
 
     event KycPurchased(address from, uint value);
 
+
+
     function buyKyc() external payable {
         require(msg.value >= kycPrice, "You need to send more money to buy kyc");
         allowed[msg.sender] = true;
@@ -41,6 +43,10 @@ contract KycContract is Ownable{
 
     function kycCompleted(address _addr) public view returns(bool) {
         return allowed[_addr]; 
+    }
+
+    function transferOwnership(address newOwner) public override onlyOwner {
+        super.transferOwnership(newOwner);
     }
 
 

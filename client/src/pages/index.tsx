@@ -8,11 +8,18 @@ import { useBaseContext } from "../contexts/BaseContext";
 import { BuyTokenComponent } from "../components/BuyTokenComponent";
 import { MineTokenComponent } from "../components/MineTokenComponent";
 import { ErrorWeb3 } from "../components/ErrorWeb3"
+import { UserToken } from '../components/UserToken';
+import { useEffect } from 'react';
 
 function Home() {
 
-  const { accounts, isOwner, loaded, loadedOk, inList, myTokenContract } = useBaseContext()
+  const { accounts, isOwner, loaded, loadedOk, inList, setUserTokenAddress } = useBaseContext()
 
+
+  useEffect(() => {
+    setUserTokenAddress(undefined)
+  })
+  
   if (!loaded) return <ErrorWeb3 message="Loading web3..." />
   
   if (!loadedOk) return <ErrorWeb3 message="Error loading dApp" error />
@@ -40,6 +47,9 @@ function Home() {
         <ClubComponent />
 
         {isOwner && inList && <MineTokenComponent />}
+
+
+        <UserToken />
 
       </VStack>
 

@@ -15,7 +15,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const myToken = await deploy('MyToken', {
     from: deployer,
-    args: [],
+    args: ["Rics Token", "RIC", 0],
     log: true,
   });
 

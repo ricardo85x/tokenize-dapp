@@ -1,14 +1,17 @@
 import { useCallback, useEffect, createContext, ReactNode, useContext, useState } from "react"
+import { useRouter } from 'next/router';
 
 import { Web3Provider, ethers } from "../lib/getWeb3"
 
-import MyToken from "../hardhat-deploy/ropsten/MyToken.json";
-import MyTokenSale from "../hardhat-deploy/ropsten/MyTokenSale.json";
-import Kyc from "../hardhat-deploy/ropsten/KycContract.json";
+import MyToken from "../hardhat-deploy/ganache/MyToken.json";
+import MyTokenSale from "../hardhat-deploy/ganache/MyTokenSale.json";
+import Kyc from "../hardhat-deploy/ganache/KycContract.json";
+import UserToken from "../hardhat-deploy/ganache/UserTokens.json";
 
 import { MyToken as MyTokenProps } from "../../../src/types/MyToken"
 import { MyTokenSale as MyTokenSaleProps } from "../../../src/types/MyTokenSale"
 import { KycContract as KycProps } from "../../../src/types/KycContract"
+import { UserTokens as UserTokensProps } from "../../../src/types/UserTokens"
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,6 +27,9 @@ interface BaseContextDataProps {
     owner: string;
     setOwner: (_owner: string) => void;
 
+    userTokenAddress:string;
+    setUserTokenAddress: (_userTokenAddress: string) => void;
+
     isOwner: boolean;
     setIsOwner: (_isOwner: boolean) => void;
 
@@ -38,6 +44,9 @@ interface BaseContextDataProps {
 
     kycContract: KycProps | undefined;
     setKycContract: (_kycContract: KycProps) => void;
+
+    userTokenContract: UserTokensProps | undefined;
+    setUserTokenContract: (_userTokenContract: UserTokensProps) => void;
 
     tokenSymbol: string;
     setTokenSymbol: (_tokenSymbol: string) => void;
@@ -66,7 +75,7 @@ interface BaseContextDataProps {
     listenJoinClub: (_contract: KycProps, _account: string, fromBlock: number) => void;
     listenToTokenTransfer: (_contract: MyTokenProps, _account: string, fromBlock: number) => void;
     listenToTokenSupply: (_myTokenContract: MyTokenProps, _myTokenSaleContract: MyTokenSaleProps, fromBlock: number) => void;
-    
+    listenCreateUserToken:  (_contract: UserTokensProps, _account: string, fromBlock: number) => void;
     updateCurrentSupply: (_myTokenContract: MyTokenProps) => void;
     updateUserTokens: (_contract: MyTokenProps, _account: string, qty: number) => void;
  
@@ -80,15 +89,20 @@ const BaseContext = createContext({} as BaseContextDataProps)
 
 export function BaseContextProvider({ children }: BaseProviderProps) {
 
+    const router = useRouter()
+
+
     const [provider, setProvider] = useState<Web3Provider>()
     const [accounts, setAccounts] = useState<string[]>()
     const [owner, setOwner] = useState<string>("_")
+    const [userTokenAddress, setUserTokenAddress] = useState<string>()
     const [isOwner, setIsOwner] = useState<boolean>(false);
     const [currentSupply, setCurrentSupply] = useState<number>(0);
 
     const [myTokenContract, setMyTokenContract] = useState<MyTokenProps>()
     const [myTokenSaleContract, setMyTokenSaleContract] = useState<MyTokenSaleProps>()
     const [kycContract, setKycContract] = useState<KycProps>()
+    const [userTokenContract, setUserTokenContract] = useState<UserTokensProps>()
     const [tokenSymbol, setTokenSymbol] = useState<string>("")
 
     const [loaded, setLoaded] = useState<boolean>(false)
@@ -103,11 +117,13 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
         provider, setProvider,
         accounts, setAccounts,
         owner, setOwner,
+        userTokenAddress, setUserTokenAddress,
         isOwner, setIsOwner,
         currentSupply, setCurrentSupply,
         myTokenContract, setMyTokenContract,
         myTokenSaleContract, setMyTokenSaleContract,
         kycContract, setKycContract,
+        userTokenContract, setUserTokenContract,
         tokenSymbol, setTokenSymbol,
         loaded, setLoaded,
         firstLoad, setFirstLoad,
@@ -156,6 +172,28 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
                 const currentBlock = args[args.length - 1].blockNumber as number;
                 if (currentBlock > fromBlock) {
                     contextValue.updateUserTokens(_contract, _account, args[2])
+                }
+            })
+
+
+        },
+
+        listenCreateUserToken: async function (_contract: UserTokensProps, _account: string, fromBlock: number) {
+
+
+            _contract.on('createTokenEvent', (...args: any[]) => {
+                const currentBlock = args[args.length - 1].blockNumber as number;
+                if (currentBlock > fromBlock) {
+                    console.log("Token criado!", args)
+                    if((args[0] as string).toLowerCase() == _account.toLowerCase() ){
+
+                        toast.info("Token criado!")
+                        router.push(`/${args[1]}`)
+                        console.log("redirecionando para ", args[1])
+                        
+                    } else {
+                        console.log("Alguem criou um token",  _account)
+                    }
                 }
             })
 
@@ -269,25 +307,41 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
                 contextValue.setProvider(provider)
                 contextValue.setAccounts(accounts)
 
+                let kyc_address = Kyc.address;
+                let myTokenSale_address = MyTokenSale.address;
+                let myToken_address = MyToken.address;
 
                 const signer = provider.getSigner();
-                const _kycContract = new ethers.Contract(Kyc.address, Kyc.abi, signer) as any as KycProps
-                const _myTokenSaleContract = new ethers.Contract(MyTokenSale.address, MyTokenSale.abi, signer) as any as MyTokenSaleProps
-                const _myTokenContract = new ethers.Contract(MyToken.address, MyToken.abi, signer) as any as MyTokenProps
+
+                const _userTokenContract = new ethers.Contract(UserToken.address, UserToken.abi, signer) as any as UserTokensProps
+
+                if(contextValue.userTokenAddress){
+
+                    myToken_address = contextValue.userTokenAddress;
+                    kyc_address = await _userTokenContract.kycContractAddress(myToken_address);
+                    myTokenSale_address = await _userTokenContract.myTokenSaleAddress(myToken_address);
+                }
+
+                const _myTokenContract = new ethers.Contract(myToken_address, MyToken.abi, signer) as any as MyTokenProps
+                const _kycContract = new ethers.Contract(kyc_address, Kyc.abi, signer) as any as KycProps
+                const _myTokenSaleContract = new ethers.Contract(myTokenSale_address, MyTokenSale.abi, signer) as any as MyTokenSaleProps
 
                 contextValue.setMyTokenContract(_myTokenContract);
                 contextValue.setMyTokenSaleContract(_myTokenSaleContract);
                 contextValue.setKycContract(_kycContract);
+                contextValue.setUserTokenContract(_userTokenContract);
 
                 // event listeners
 
                 // remove previous events
                 _myTokenContract.removeAllListeners()
                 _myTokenSaleContract.removeAllListeners()
+                _userTokenContract.removeAllListeners()
 
                 contextValue.listenJoinClub(_kycContract, accounts[0], await provider.getBlockNumber())
                 contextValue.listenToTokenTransfer(_myTokenContract, accounts[0], await provider.getBlockNumber())
                 contextValue.listenToTokenSupply(_myTokenContract, _myTokenSaleContract, await provider.getBlockNumber())
+                contextValue.listenCreateUserToken(_userTokenContract, accounts[0], await provider.getBlockNumber())
 
                 //
                 contextValue.setTokenSymbol(await _myTokenContract.symbol())
@@ -295,9 +349,14 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
                 const allowed = await _kycContract.kycCompleted(accounts[0]);
                 contextValue.setInList(allowed)
 
-                const ownerAddress = await _kycContract.owner()
+                const ownerAddress = await _myTokenContract.owner()
 
+            
                 contextValue.setOwner(ownerAddress)
+
+                console.log("kyc owner", ownerAddress)
+                console.log("conta 0", accounts[0])
+
                 contextValue.setIsOwner(ownerAddress.toLowerCase() === accounts[0].toLowerCase())
                 contextValue.updateCurrentSupply(_myTokenContract);
 
@@ -316,6 +375,10 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
     useEffect(() => {
         connectWeb3(contextValue.accounts);
     }, [connectWeb3])
+
+    useEffect(() => {
+        resetConnection()
+    }, [contextValue.userTokenAddress])
 
 
     return (

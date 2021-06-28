@@ -30,7 +30,7 @@ describe("Token test", async () => {
             await deployContract(
                 signers[0], 
                 MyTokenArtifact, 
-                []
+                ["Ric Token", "RIC", 0]
             )
         ) as MyTokenProps;
 

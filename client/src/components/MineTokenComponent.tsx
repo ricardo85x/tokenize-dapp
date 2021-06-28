@@ -15,7 +15,7 @@ export function MineTokenComponent() {
         if (data.tokens > 0 && accounts && myTokenContract && myTokenSaleContract) {
 
           try {
-            await myTokenContract.mint(myTokenSaleContract.address ,data.tokens)
+            await myTokenContract.mint(accounts[0] ,data.tokens)
 
             toast.info("Transaction sent, token will be minted once confirmed")
 
@@ -32,11 +32,11 @@ export function MineTokenComponent() {
     return (
         <VStack fontWeight="bold" spacing="5" align="flex-start">
 
-            <Text>Mine {tokenSymbol} Token!</Text>
+            <Text>Mint {tokenSymbol} Token!</Text>
 
             <VStack as="form" onSubmit={handleSubmit(handleMineTokens)} spacing="2" align="flex-start">
                 <Input   {...register("tokens")} defaultValue="5" label="amount" type="number" />
-                <Button size="lg" colorScheme="blackAlpha" type="submit">Mine Tokens</Button>
+                <Button size="lg" colorScheme="blackAlpha" type="submit">Mint Tokens</Button>
             </VStack>
 
         </VStack>

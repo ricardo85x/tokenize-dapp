@@ -21,7 +21,7 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface UserTokensInterface extends ethers.utils.Interface {
   functions: {
-    "createToken(string,string,uint8)": FunctionFragment;
+    "createToken(string,string,uint8,uint256)": FunctionFragment;
     "kycContractAddress(address)": FunctionFragment;
     "myTokenSaleAddress(address)": FunctionFragment;
     "userTokenAddress(address,uint256)": FunctionFragment;
@@ -30,7 +30,7 @@ interface UserTokensInterface extends ethers.utils.Interface {
 
   encodeFunctionData(
     functionFragment: "createToken",
-    values: [string, string, BigNumberish]
+    values: [string, string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "kycContractAddress",
@@ -125,6 +125,7 @@ export class UserTokens extends BaseContract {
       _name: string,
       _symbol: string,
       _decimals: BigNumberish,
+      _tokenRateSale: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -154,6 +155,7 @@ export class UserTokens extends BaseContract {
     _name: string,
     _symbol: string,
     _decimals: BigNumberish,
+    _tokenRateSale: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -174,6 +176,7 @@ export class UserTokens extends BaseContract {
       _name: string,
       _symbol: string,
       _decimals: BigNumberish,
+      _tokenRateSale: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -214,6 +217,7 @@ export class UserTokens extends BaseContract {
       _name: string,
       _symbol: string,
       _decimals: BigNumberish,
+      _tokenRateSale: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -244,6 +248,7 @@ export class UserTokens extends BaseContract {
       _name: string,
       _symbol: string,
       _decimals: BigNumberish,
+      _tokenRateSale: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

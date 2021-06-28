@@ -13,7 +13,7 @@ export function Header() {
 
     return (
         <Box
-            bg="#2F2F2F"
+            bg="cyan.800"
             width="100%"
             align="center"
         >

@@ -13,15 +13,19 @@ export function BuyTokenComponent() {
 
         if (data.tokens > 0 && accounts && myTokenSaleContract) {
 
+          const totalValue = ethers.BigNumber.from(tokenRate).mul(ethers.BigNumber.from(data.tokens))
+
+          console.log("TOTALValue", totalValue.toNumber())
+
           try {
             await myTokenSaleContract.buyTokens(accounts[0], {
-              value: ethers.BigNumber.from(data.tokens),
+              value: totalValue.toNumber(),
             })
             toast.info("Transaction sent, balance will updated once confirmed")
+
           } catch (err) {
             toast.error("Error sending transaction")
             console.error("Error sending transaction",err)
-
           }
         }
       }
@@ -55,7 +59,7 @@ export function BuyTokenComponent() {
                 <Text>How many tokens you want to buy?</Text>
                 <Input   {...register("tokens")} defaultValue="5" label="amount" type="number" />
                 <Button size="lg" colorScheme="blackAlpha" type="submit">Buy Tokens</Button>
-                <Text  fontSize="12" color="red.300"> * Only {tokenRate} wei each</Text>
+                <Text  fontSize="12" color="red.300"> * Only {ethers.utils.formatEther(tokenRate)} ETH each</Text>
             </VStack>
 
             <Text>You can also send weis to the following address to obtain tokens</Text>

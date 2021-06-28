@@ -29,6 +29,7 @@ export function ClubComponent() {
           toast.warning(`${littleAddress} is already in the list`,);
         } else {
 
+          
           if (isOwner) {
             await kycContract.setKycCompleted(address)
           } else {

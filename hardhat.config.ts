@@ -6,6 +6,9 @@ import '@nomiclabs/hardhat-waffle'
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 
+import "hardhat-watcher";
+
+
 import { task } from "hardhat/config";
 import * as dotenv from "dotenv";
 
@@ -45,6 +48,13 @@ const config: HardhatUserConfig = {
       accounts: {
         mnemonic: process.env.MNEMONIC
       }
+    }
+  },
+  watcher: {
+    test: {
+      files: ['./test/**/*'],
+      tasks: [{ command: 'test', params: { testFiles: ['{path}'] } }],
+      verbose: true
     }
   }
 };

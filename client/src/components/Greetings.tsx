@@ -8,7 +8,7 @@ export function Greetings( ) {
     let message = "Hello Traveler"
 
     if(isOwner) {
-        message = "Hellow Owner \\o/";
+        message = "Hello Owner \\o/";
     } else if (inList) {
         message = "Hello Traveler your are in the club!"
     }

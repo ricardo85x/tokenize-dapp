@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/ricardoteixeira/Documents/code/solidity/udemy_bootcamp/session12_hardhat/contracts/Crowdsale.sol": {
-      "lastModificationDate": 1622588835960,
-      "contentHash": "96db2c849b9c86cb4c4fdecd00e6b809",
+      "lastModificationDate": 1624922888550,
+      "contentHash": "e2be511be180c8eb61d5d5db957ef4e0",
       "sourceName": "contracts/Crowdsale.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -305,8 +305,8 @@
       ]
     },
     "/Users/ricardoteixeira/Documents/code/solidity/udemy_bootcamp/session12_hardhat/contracts/MyTokenSale.sol": {
-      "lastModificationDate": 1623983934253,
-      "contentHash": "09d7ce9298d346406824c0353c3eaaad",
+      "lastModificationDate": 1624923623664,
+      "contentHash": "749da9803a22da97e6feb5883e67e7a3",
       "sourceName": "contracts/MyTokenSale.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -350,8 +350,8 @@
       ]
     },
     "/Users/ricardoteixeira/Documents/code/solidity/udemy_bootcamp/session12_hardhat/contracts/KycContract.sol": {
-      "lastModificationDate": 1624058068556,
-      "contentHash": "2d2709b54d5196db6a969f8f4d58e1ff",
+      "lastModificationDate": 1624491455675,
+      "contentHash": "3e9f2f3b70fdf9fab520539c7a40319d",
       "sourceName": "contracts/KycContract.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -528,8 +528,8 @@
       ]
     },
     "/Users/ricardoteixeira/Documents/code/solidity/udemy_bootcamp/session12_hardhat/contracts/MyToken.sol": {
-      "lastModificationDate": 1624060935355,
-      "contentHash": "1569d4659340d7b5f27dd3cfd480d9e9",
+      "lastModificationDate": 1624923990361,
+      "contentHash": "0058d940cf6880fcbd8f73da6d9b749d",
       "sourceName": "contracts/MyToken.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -563,6 +563,7 @@
       },
       "imports": [
         "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts/access/Ownable.sol",
         "./mint/ERC20Mintable.sol"
       ],
       "versionPragmas": [
@@ -705,7 +706,7 @@
       ]
     },
     "/Users/ricardoteixeira/Documents/code/solidity/udemy_bootcamp/session12_hardhat/contracts/mint/MintedCrowdsale.sol": {
-      "lastModificationDate": 1623799856243,
+      "lastModificationDate": 1623983934255,
       "contentHash": "ac7d8fdc4339264caf88d91691b8e888",
       "sourceName": "contracts/mint/MintedCrowdsale.sol",
       "solcConfig": {
@@ -750,8 +751,8 @@
       ]
     },
     "/Users/ricardoteixeira/Documents/code/solidity/udemy_bootcamp/session12_hardhat/contracts/UserTokens.sol": {
-      "lastModificationDate": 1624313483113,
-      "contentHash": "92793683e33284f58900c78c748d74e1",
+      "lastModificationDate": 1624565860121,
+      "contentHash": "161e6705ef9e48b11aa5d997560b058b",
       "sourceName": "contracts/UserTokens.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -784,7 +785,7 @@
         }
       },
       "imports": [
-        "./CustomToken.sol",
+        "./MyToken.sol",
         "./KycContract.sol",
         "./MyTokenSale.sol"
       ],
