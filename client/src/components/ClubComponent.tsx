@@ -1,4 +1,4 @@
-import { VStack, Text, Button, Input } from "@chakra-ui/react"
+import { VStack, Box, Text, Button, Input } from "@chakra-ui/react"
 import { useBaseContext } from "../contexts/BaseContext"
 import { toast } from 'react-toastify';
 
@@ -29,7 +29,7 @@ export function ClubComponent() {
           toast.warning(`${littleAddress} is already in the list`,);
         } else {
 
-          
+
           if (isOwner) {
             await kycContract.setKycCompleted(address)
           } else {
@@ -43,7 +43,7 @@ export function ClubComponent() {
 
       } catch (err) {
         toast.error(`Error to process this address or you are not allowed`);
-        console.error("Error to process this address or you are not allowed`",err)
+        console.error("Error to process this address or you are not allowed`", err)
 
       }
 
@@ -65,35 +65,42 @@ export function ClubComponent() {
   }
 
   return (
-    <VStack spacing="5" fontWeight="bold" align="flex-start" >
+    <Box mx="5"  maxW="500px" backgroundColor="gray.800" borderRadius="10" p="5">
+
+      <Text mx="5" fontWeight="bold" color="cyan.400" >Club</Text>
+
+      <VStack mx="5" spacing="5" fontSize="25" align="flex-start" >
+        
+
+        {!inList && (
+          <VStack align="flex-start" as="form" onSubmit={handleSubmit(handleAddMySelf)} spacing="2" >
+            <Text >{message}</Text>
+            <Button size="lg" colorScheme="blackAlpha" type="submit">Join Club</Button>
+            {!isOwner && <Text fontSize="12" color="red.300"> * Only {clubRate} wei </Text>}
+
+          </VStack>
+
+        )}
 
 
-      {!inList && (
-        <VStack align="flex-start"  as="form" onSubmit={handleSubmit(handleAddMySelf)} spacing="2" >
-          <Text >{message}</Text>
-          <Button size="lg" colorScheme="blackAlpha" type="submit">Join Club</Button>
-          {!isOwner && <Text fontSize="12" color="red.300"> * Only {clubRate} wei </Text>}
 
-        </VStack>
+        {!isOwner && !inList && (
+          <Text >You can also contact the owner to try to get in for free</Text>
+        )}
 
-      )}
+        {isOwner && (
 
-
-
-      {!isOwner && !inList && (
-        <Text >You can also contact the owner to try to get in for free</Text>
-      )}
-
-      {isOwner && (
-
-        <VStack align="flex-start" spacing="3" as="form" onSubmit={handleSubmit(handleAddInList)}>
-          <Text >Add your friends to the club</Text>
-          <Input   {...register("kycAddress")} label="KYC Address" type="text" />
-          <Button mt="3" size="lg" colorScheme="blackAlpha" type="submit">Add address</Button>
-        </VStack>
+          <VStack align="flex-start" spacing="3" as="form" onSubmit={handleSubmit(handleAddInList)}>
+            <Text  >Add your friends to the club</Text>
+            <Input   {...register("kycAddress")} label="KYC Address" type="text" />
+            <Button mt="3" size="lg" colorScheme="blackAlpha" type="submit">Add address</Button>
+          </VStack>
 
 
-      )}
-    </VStack>
+        )}
+      </VStack>
+
+    </Box>
+
   )
 }

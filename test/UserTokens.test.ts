@@ -65,8 +65,10 @@ describe("User Tokens test", async () => {
 
         const TOKEN_SYMBOL = "TEST"
 
+        const KYC_PRICE = 10;
+
         // create token
-        await userTokens.createToken("Token test", TOKEN_SYMBOL, 0, 1);
+        await userTokens.createToken("Token test", TOKEN_SYMBOL, 0, 1, KYC_PRICE);
         const numberOfTokens = await userTokens.userTokensCount(accountAddresses1);
         expect(numberOfTokens).to.be.equal(1);
         nTokens++;
@@ -95,12 +97,15 @@ describe("User Tokens test", async () => {
 
         const TOKEN_SYMBOL = "TEST"
 
+        const KYC_PRICE = 100;
+
+
         const WAI_PRICE = 5
 
         const TOKEN_DECIMAL = 18
 
         // create token
-        await userTokens.createToken("Token test", TOKEN_SYMBOL, TOKEN_DECIMAL, WAI_PRICE);
+        await userTokens.createToken("Token test", TOKEN_SYMBOL, TOKEN_DECIMAL, WAI_PRICE, KYC_PRICE);
 
         const numberOfTokens = await userTokens.userTokensCount(accountAddresses1);
         expect(numberOfTokens).to.be.equal(1);

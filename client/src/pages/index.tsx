@@ -1,4 +1,4 @@
-import { Flex, Text, VStack, Box } from '@chakra-ui/react'
+import { Flex, Text, HStack, Box } from '@chakra-ui/react'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Header } from "../components/Header";
@@ -36,22 +36,29 @@ function Home() {
     >
       <Header />
 
-      <VStack pb="100" maxW={1100} w="100%" fontSize="34" m="5" spacing="10" align="flex-start">
+     
 
+      <Box maxW={1100} w="100%" fontSize="34" m="5"  align="flex-start">
         <Greetings />
+      </Box>
+
+      <Flex pb="100" wrap="wrap" gridGap="12" maxW={1100} w="100%" fontSize="34" m="5" spacing="10" justify="space-between" align="flex-start">
+    
+        <UserToken />
+       
 
         {inList && <BuyTokenComponent />}
 
         
-
-        <ClubComponent />
+        { (!inList || isOwner) && <ClubComponent />}
+        
 
         {isOwner && inList && <MineTokenComponent />}
 
 
-        <UserToken />
+       
 
-      </VStack>
+      </Flex>
 
       <ToastContainer />
 

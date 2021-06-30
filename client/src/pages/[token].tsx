@@ -38,33 +38,36 @@ function HomeToken() {
 
     return (
         <Flex
-            w="100%"
-            h="100vh"
-            mh="auto"
-            direction="column"
-            align="center"
-
+          w="100%"
+          h="100vh"
+          mh="auto"
+          direction="column"
+          align="center"
+    
         >
-            <Header />
-
-            <VStack pb="100" maxW={1100} w="100%" fontSize="34" m="5" spacing="10" align="flex-start">
-
-                <Greetings />
-
-                {inList && <BuyTokenComponent />}
-
-
-
-                <ClubComponent />
-
-                {isOwner && inList && <MineTokenComponent />}
-
-            </VStack>
-
-            <ToastContainer />
-
+          <Header back />
+    
+         
+    
+          <Box maxW={1100} w="100%" fontSize="34" m="5"  align="flex-start">
+            <Greetings />
+          </Box>
+    
+          <Flex  pb="100" wrap="wrap" gridGap="12" maxW={1100} w="100%" fontSize="34" m="5" spacing="10" justify="space-between" align="flex-start">
+        
+            {inList && <BuyTokenComponent />}
+    
+            <ClubComponent />
+    
+            {isOwner && inList && <MineTokenComponent />}
+    
+    
+          </Flex>
+    
+          <ToastContainer />
+    
         </Flex>
-    );
+      );
 
 }
 

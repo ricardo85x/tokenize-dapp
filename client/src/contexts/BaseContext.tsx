@@ -3,10 +3,10 @@ import { useRouter } from 'next/router';
 
 import { Web3Provider, ethers } from "../lib/getWeb3"
 
-import MyToken from "../hardhat-deploy/ganache/MyToken.json";
-import MyTokenSale from "../hardhat-deploy/ganache/MyTokenSale.json";
-import Kyc from "../hardhat-deploy/ganache/KycContract.json";
-import UserToken from "../hardhat-deploy/ganache/UserTokens.json";
+import MyToken from "../hardhat-deploy/ropsten/MyToken.json";
+import MyTokenSale from "../hardhat-deploy/ropsten/MyTokenSale.json";
+import Kyc from "../hardhat-deploy/ropsten/KycContract.json";
+import UserToken from "../hardhat-deploy/ropsten/UserTokens.json";
 
 import { MyToken as MyTokenProps } from "../../../src/types/MyToken"
 import { MyTokenSale as MyTokenSaleProps } from "../../../src/types/MyTokenSale"
@@ -16,6 +16,14 @@ import { UserTokens as UserTokensProps } from "../../../src/types/UserTokens"
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+interface TokenProps {
+    name: string;
+    symbol: string;
+    decimals: number;
+    value: string;
+    address: string;
+}
+
 interface BaseContextDataProps {
 
     provider: Web3Provider | undefined
@@ -23,6 +31,9 @@ interface BaseContextDataProps {
 
     accounts: string[] | undefined
     setAccounts: (_accounts: string[]) => void;
+
+    tokens: TokenProps[];
+    setTokens: (_tokens: TokenProps[]) => void;
 
     owner: string;
     setOwner: (_owner: string) => void;
@@ -94,6 +105,7 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
 
     const [provider, setProvider] = useState<Web3Provider>()
     const [accounts, setAccounts] = useState<string[]>()
+    const [tokens, setTokens] = useState<TokenProps[]>([])
     const [owner, setOwner] = useState<string>("_")
     const [userTokenAddress, setUserTokenAddress] = useState<string>()
     const [isOwner, setIsOwner] = useState<boolean>(false);
@@ -116,6 +128,7 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
     const contextValue: BaseContextDataProps = {
         provider, setProvider,
         accounts, setAccounts,
+        tokens, setTokens,
         owner, setOwner,
         userTokenAddress, setUserTokenAddress,
         isOwner, setIsOwner,
@@ -252,7 +265,9 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
         contextValue.setLoaded(false)
         contextValue.setLoadedOk(false)
         contextValue.setAccounts(undefined)
+        contextValue.setTokens([])
         contextValue.setMyTokenBalance(0)
+        
 
     }
 
@@ -315,21 +330,81 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
 
                 const _userTokenContract = new ethers.Contract(UserToken.address, UserToken.abi, signer) as any as UserTokensProps
 
-                if(contextValue.userTokenAddress){
+                if(contextValue.userTokenAddress){ 
 
-                    myToken_address = contextValue.userTokenAddress;
-                    kyc_address = await _userTokenContract.kycContractAddress(myToken_address);
-                    myTokenSale_address = await _userTokenContract.myTokenSaleAddress(myToken_address);
+               
+
+                        myToken_address = contextValue.userTokenAddress;
+                        kyc_address = await _userTokenContract.kycContractAddress(myToken_address);
+                        myTokenSale_address = await _userTokenContract.myTokenSaleAddress(myToken_address);
+
+
+
+                  
                 }
 
                 const _myTokenContract = new ethers.Contract(myToken_address, MyToken.abi, signer) as any as MyTokenProps
                 const _kycContract = new ethers.Contract(kyc_address, Kyc.abi, signer) as any as KycProps
                 const _myTokenSaleContract = new ethers.Contract(myTokenSale_address, MyTokenSale.abi, signer) as any as MyTokenSaleProps
 
+
+                try {
+
+                    await _kycContract.kycCompleted(accounts[0]);
+
+                } catch (e) {
+
+                    toast.error(`🪲 Invalid token address ${contextValue.userTokenAddress}`, {
+                        position: "top-right",
+                        autoClose: 10000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+
+                    setLoadedOk(false)
+                    // setLoaded(false)
+
+                    return;
+
+                }
+
+
                 contextValue.setMyTokenContract(_myTokenContract);
                 contextValue.setMyTokenSaleContract(_myTokenSaleContract);
                 contextValue.setKycContract(_kycContract);
                 contextValue.setUserTokenContract(_userTokenContract);
+
+
+                // my tokens
+                const _numberOfTokens =  await _userTokenContract.userTokensCount(accounts[0])
+
+                if (_numberOfTokens.toNumber() > 0) {
+
+                    let _tokenList : TokenProps[] = []
+
+                    for( let i = 0; i < _numberOfTokens.toNumber(); i++) {
+
+                        const _tokenAddress = await _userTokenContract.userTokenAddress(accounts[0], i)
+                        const _tokenSaleaddress = await _userTokenContract.myTokenSaleAddress(_tokenAddress)
+                        
+                        const _myToken = new ethers.Contract(_tokenAddress, MyToken.abi, signer) as any as MyTokenProps
+                        const _myTokenSale = new ethers.Contract(_tokenSaleaddress, MyTokenSale.abi, signer) as any as MyTokenSaleProps
+
+                        _tokenList.push({
+                            address: _tokenAddress,
+                            decimals: await _myToken.decimals(),
+                            name: await _myToken.name(),
+                            symbol: await _myToken.symbol(),
+                            value: (await _myTokenSale.rate()).toString()
+                        })
+                    }
+
+                    contextValue.setTokens(_tokenList)
+                }
+
 
                 // event listeners
 

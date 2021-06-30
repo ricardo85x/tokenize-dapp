@@ -350,8 +350,8 @@
       ]
     },
     "/Users/ricardoteixeira/Documents/code/solidity/udemy_bootcamp/session12_hardhat/contracts/KycContract.sol": {
-      "lastModificationDate": 1624491455675,
-      "contentHash": "3e9f2f3b70fdf9fab520539c7a40319d",
+      "lastModificationDate": 1625004729310,
+      "contentHash": "1131228dede6982b86c272003b09091d",
       "sourceName": "contracts/KycContract.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -751,8 +751,8 @@
       ]
     },
     "/Users/ricardoteixeira/Documents/code/solidity/udemy_bootcamp/session12_hardhat/contracts/UserTokens.sol": {
-      "lastModificationDate": 1624565860121,
-      "contentHash": "161e6705ef9e48b11aa5d997560b058b",
+      "lastModificationDate": 1625004871150,
+      "contentHash": "630861fa990a45109d3184abe45a4f48",
       "sourceName": "contracts/UserTokens.sol",
       "solcConfig": {
         "version": "0.8.0",

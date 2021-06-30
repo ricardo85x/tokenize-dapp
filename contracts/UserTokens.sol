@@ -16,7 +16,7 @@ contract UserTokens {
 
     event createTokenEvent(address _userAddress, address _tokenAddress);
 
-    function createToken(string memory _name, string memory _symbol, uint8 _decimals, uint _tokenRateSale) public {
+    function createToken(string memory _name, string memory _symbol, uint8 _decimals, uint _tokenRateSale, uint _kycPrice) public {
 
         // create user token kyc and tokenSale contracts
         MyToken userToken = new MyToken(_name,_symbol, _decimals);
@@ -24,6 +24,9 @@ contract UserTokens {
         MyTokenSale userTokenSale = new MyTokenSale(_tokenRateSale, payable(msg.sender), userToken, userKycContract);
 
         userToken.addMinter(address(userTokenSale));
+        userToken.addMinter(msg.sender);
+
+        userKycContract.setKycPrice(_kycPrice);
 
         userToken.transferOwnership(address(msg.sender));
         userKycContract.transferOwnership(address(msg.sender));

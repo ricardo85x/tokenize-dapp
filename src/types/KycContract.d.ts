@@ -23,8 +23,10 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface KycContractInterface extends ethers.utils.Interface {
   functions: {
     "buyKyc()": FunctionFragment;
+    "clubBalance()": FunctionFragment;
     "kycCompleted(address)": FunctionFragment;
     "kycPrice()": FunctionFragment;
+    "members()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setKycCompleted(address)": FunctionFragment;
@@ -36,10 +38,15 @@ interface KycContractInterface extends ethers.utils.Interface {
 
   encodeFunctionData(functionFragment: "buyKyc", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "clubBalance",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "kycCompleted",
     values: [string]
   ): string;
   encodeFunctionData(functionFragment: "kycPrice", values?: undefined): string;
+  encodeFunctionData(functionFragment: "members", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -68,10 +75,15 @@ interface KycContractInterface extends ethers.utils.Interface {
 
   decodeFunctionResult(functionFragment: "buyKyc", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "clubBalance",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "kycCompleted",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "kycPrice", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "members", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -155,9 +167,13 @@ export class KycContract extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    clubBalance(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     kycCompleted(_addr: string, overrides?: CallOverrides): Promise<[boolean]>;
 
     kycPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    members(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -194,9 +210,13 @@ export class KycContract extends BaseContract {
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  clubBalance(overrides?: CallOverrides): Promise<BigNumber>;
+
   kycCompleted(_addr: string, overrides?: CallOverrides): Promise<boolean>;
 
   kycPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
+  members(overrides?: CallOverrides): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -231,9 +251,13 @@ export class KycContract extends BaseContract {
   callStatic: {
     buyKyc(overrides?: CallOverrides): Promise<void>;
 
+    clubBalance(overrides?: CallOverrides): Promise<BigNumber>;
+
     kycCompleted(_addr: string, overrides?: CallOverrides): Promise<boolean>;
 
     kycPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
+    members(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -279,9 +303,13 @@ export class KycContract extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    clubBalance(overrides?: CallOverrides): Promise<BigNumber>;
+
     kycCompleted(_addr: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     kycPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
+    members(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -319,12 +347,16 @@ export class KycContract extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    clubBalance(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     kycCompleted(
       _addr: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     kycPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    members(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
