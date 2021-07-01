@@ -4,12 +4,24 @@ import { useBaseContext } from "../contexts/BaseContext"
 import { FiChevronLeft, FiChevronDown } from "react-icons/fi"
 
 import NextLink from "next/link"
+import { useRouter } from "next/router"
 
 interface HeaderProps {
     back?: boolean
 }
 
 export function Header({ back }: HeaderProps) {
+
+    const router = useRouter()
+
+    let currentToken = "0x000"
+
+    if (router.query?.token){
+        currentToken = (router.query.token as string).toLowerCase()
+    }
+
+
+
 
     const {
         accounts, inList, myTokenBalance, tokenSymbol, tokens
@@ -57,9 +69,9 @@ export function Header({ back }: HeaderProps) {
 
                         <Box align="start" ml="4">
                             {inList ? (
-                                <Text fontWeight="bold" color="green.500">Approved</Text>
+                                <Text fontWeight="bold" color="green.500">In the Club</Text>
                             ) : (
-                                <Text fontWeight="bold" color="red.500">Not Approved</Text>
+                                <Text fontWeight="bold" color="red.500">Not in the Club</Text>
                             )}
                         </Box>
                         <Box ml="4" align="start"><b>Balance</b>: {myTokenBalance} {tokenSymbol}</Box>
@@ -68,10 +80,10 @@ export function Header({ back }: HeaderProps) {
                             <>
                                 <MenuDivider />
                                 <MenuGroup title="Tokens" align="start">
-                                    {tokens.map(t => <MenuItem key={t.address}>
-                                        <NextLink href={`/${t.address}`}>
-                                            <Link>
-                                                <Text fontSize="small">- {t.symbol}</Text>
+                                    {tokens.map(t => <MenuItem key={t.address} isDisabled={currentToken === t.address.toLowerCase()} >
+                                        <NextLink  href={`/${t.address}`}>
+                                            <Link as="span" _hover={{ textDecoration: "none"}} >
+                                                <Text  fontSize="small">- {t.symbol}</Text>
                                             </Link>
                                         </NextLink>
 

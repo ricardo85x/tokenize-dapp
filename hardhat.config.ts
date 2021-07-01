@@ -40,15 +40,24 @@ const config: HardhatUserConfig = {
       saveDeployments: true,
       accounts: {
         mnemonic: process.env.MNEMONIC
-      }
+      },
+      allowUnlimitedContractSize: true,
+
     },
     ropsten: {
       url: process.env.INFURA_ROPSTEN_HTTPS_ENDPOINT,
       saveDeployments: true,
       accounts: {
         mnemonic: process.env.MNEMONIC
-      }
+      },
+      allowUnlimitedContractSize: true,
+
+    },
+
+    hardhat: {
+      allowUnlimitedContractSize: true,
     }
+    
   },
   watcher: {
     test: {
@@ -56,7 +65,9 @@ const config: HardhatUserConfig = {
       tasks: [{ command: 'test', params: { testFiles: ['{path}'] } }],
       verbose: true
     }
-  }
+  },
+
+  
 };
 
 export default config;
