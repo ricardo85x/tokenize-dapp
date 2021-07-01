@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 
 import { SubmitHandler, useForm } from 'react-hook-form'
 
+import {ethers } from "ethers"
+
 type AddInListDataType = {
   kycAddress: string;
 }
@@ -65,7 +67,7 @@ export function ClubComponent() {
   }
 
   return (
-    <Box mx="5"  maxW="500px" backgroundColor="gray.800" borderRadius="10" p="5">
+    <Box mx="5"  w="100%" backgroundColor="gray.800" borderRadius="10" p="5">
 
       <Text mx="5" fontWeight="bold" color="cyan.400" >Club</Text>
 
@@ -76,7 +78,7 @@ export function ClubComponent() {
           <VStack align="flex-start" as="form" onSubmit={handleSubmit(handleAddMySelf)} spacing="2" >
             <Text >{message}</Text>
             <Button size="lg" colorScheme="blackAlpha" type="submit">Join Club</Button>
-            {!isOwner && <Text fontSize="12" color="red.300"> * Only {clubRate} wei </Text>}
+            {!isOwner && <Text fontSize="12" color="red.300"> * Only {  ethers.utils.formatEther(clubRate)} ETH </Text>}
 
           </VStack>
 

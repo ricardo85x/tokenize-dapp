@@ -262,9 +262,17 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
 
     const resetConnection = () => {
 
+        console.log("Resetando")
+   
+        !!contextValue.myTokenContract && contextValue.myTokenContract.removeAllListeners()
+        !!contextValue.myTokenSaleContract && contextValue.myTokenSaleContract.removeAllListeners()
+        !!contextValue.userTokenContract && contextValue.userTokenContract.removeAllListeners()
+        !!contextValue.kycContract && contextValue.kycContract.removeAllListeners()
+        
         contextValue.setLoaded(false)
         contextValue.setLoadedOk(false)
         contextValue.setAccounts(undefined)
+        contextValue.setCurrentSupply(0)
         contextValue.setTokens([])
         contextValue.setMyTokenBalance(0)
         
@@ -412,6 +420,9 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
                 _myTokenContract.removeAllListeners()
                 _myTokenSaleContract.removeAllListeners()
                 _userTokenContract.removeAllListeners()
+                _kycContract.removeAllListeners()
+
+                console.log("OLA 1")
 
                 contextValue.listenJoinClub(_kycContract, accounts[0], await provider.getBlockNumber())
                 contextValue.listenToTokenTransfer(_myTokenContract, accounts[0], await provider.getBlockNumber())
@@ -447,12 +458,20 @@ export function BaseContextProvider({ children }: BaseProviderProps) {
         }
     }, [contextValue.accounts, contextValue.provider, contextValue.loaded])
 
+    
     useEffect(() => {
         connectWeb3(contextValue.accounts);
     }, [connectWeb3])
 
     useEffect(() => {
-        resetConnection()
+
+        console.log(`EFFECT no userTokenAddress ${contextValue.firstLoad == true}`)
+        if(contextValue.firstLoad){
+            resetConnection()
+        } 
+     
+
+        
     }, [contextValue.userTokenAddress])
 
 

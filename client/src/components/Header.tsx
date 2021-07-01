@@ -39,20 +39,23 @@ export function Header({ back }: HeaderProps) {
             width="100%"
             
             align="center"
+
             
         >
             <Flex
                 justify="space-between"
-                py="15"
+                my="15"
                 align="center"
-                maxW={1100}
-                px="10"
+                maxW={1050}
+           
+                mx="5"
+                px="5"
                 
             >
                 <HStack spacing="1" >
 
 
-                    {back && (<NextLink href="/"><Link ml="-7" > <Image size="25px" as={FiChevronLeft} /></Link></NextLink>)}
+                    {back && (<NextLink href="/"><Link ml="-7" mr="5" > <Image size="25px" as={FiChevronLeft} /></Link></NextLink>)}
                     <Text fontSize="34" fontWeight="bold">{tokenSymbol} Token Sale</Text>
 
                 </HStack>

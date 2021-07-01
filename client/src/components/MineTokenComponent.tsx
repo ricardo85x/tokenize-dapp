@@ -30,12 +30,14 @@ export function MineTokenComponent() {
   }
 
   return (
-    <Box mx="5"  maxW="500px" backgroundColor="gray.800" borderRadius="10" p="5">
-      <VStack mx="5" fontWeight="bold" spacing="5" align="flex-start">
+    <Box mx="5"   w="100%"  backgroundColor="gray.800" borderRadius="10" p="5">
+      <VStack mx="5" spacing="5" align="flex-start">
 
-        <Text>Mint {tokenSymbol} Token!</Text>
+        <Text fontWeight="bold"  color="cyan.400" >Mint {tokenSymbol} Token!</Text>
 
         <VStack as="form" onSubmit={handleSubmit(handleMineTokens)} spacing="2" align="flex-start">
+          <Text fontSize="25" >Mint Token to your address </Text>
+
           <Input   {...register("tokens")} defaultValue="5" label="amount" type="number" />
           <Button size="lg" colorScheme="blackAlpha" type="submit">Mint Tokens</Button>
         </VStack>

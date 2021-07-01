@@ -52,7 +52,11 @@ export function BuyTokenComponent() {
 
   return (
 
-    <Box mx="5" maxW="500px" backgroundColor="gray.800" borderRadius="10" p="5">
+    <Box mx="5" 
+      w="100%"      
+      // maxW="500px" 
+      
+      backgroundColor="gray.800" borderRadius="10" p="5">
       
       <Text mx="5" fontWeight="bold" color="cyan.400">Token {tokenSymbol}</Text>
 
