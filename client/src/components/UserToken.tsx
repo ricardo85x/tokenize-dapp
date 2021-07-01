@@ -1,4 +1,4 @@
-import { VStack, Text, Input, Button, Divider, Box } from "@chakra-ui/react"
+import { VStack, Text, Input, Button, Divider, Grid, Box } from "@chakra-ui/react"
 import { useBaseContext } from "../contexts/BaseContext"
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from "react-toastify"
@@ -60,37 +60,61 @@ export function UserToken() {
     }
 
 
+    
+
+
     return (
         <Box  mx="5"  w="100%"  backgroundColor="gray.800" borderRadius="10" p="5">
             <VStack mx="5" spacing="5" align="flex-start" >
 
                 <Text fontWeight="bold"  color="cyan.400">Create your own Token!</Text>
+                
+                <Box fontSize="25"  mx="10" as="form" onSubmit={handleSubmit(handleCreateToken)} >
+                <Grid  templateColumns={["repeat(1,1fr)","repeat(2,1fr)","repeat(3,1fr)"]} gridGap="5" align="flex-start">
+                    
 
-                <VStack fontSize="25"  mx="10" as="form" onSubmit={handleSubmit(handleCreateToken)} spacing="2" align="flex-start">
+                    <Box>
                     <Text>Name (Up to 15 characters)</Text>
                     <Input   {...register("name", { pattern: /^[a-z][a-z0-9_ ]{2,17}$/i, required: true })  } label="Name" type="text" />
                     {errors.name && <Text color="red.300" fontSize="15">Require a name with 3 to 15 characters</Text>}
 
+                    </Box> 
+                    
+                    <Box>
                     <Text>Symbol(Up to 6 characters)</Text>
                     <Input   {...register("symbol", { pattern: /^[a-z][a-z0-9_]{2,5}$/i, required: true })} label="symbol" type="text" />
                     {errors.symbol && <Text color="red.300" fontSize="15">Require a symbol with 3 to 6 characters</Text>}
 
+                    </Box>
+                    
+                    <Box>
                     <Text>Decimals (divisible)</Text>
                     <Input   {...register("decimals", { min: 0, max: 18, required: true })} defaultValue="18" label="decimals" type="number" />
                     {errors.decimals && <Text color="red.300" fontSize="15">Select a value between 0 and 18</Text>}
 
+                    </Box>
+                    
+                    <Box>
                     <Text>Token sale value in ETH</Text>
                     <Input   {...register("value", { pattern: /^\d+([.]\d{1,18})?$/, required: true })} defaultValue="0.000000000000000001" placeholder="0.000000000000000001" label="Sale value in ETH" type="text" />
                     {errors.value && <Text color="red.300" fontSize="15">Select a value bigger than 0.000000000000000001  for token price</Text>}
 
-                    <Text>Club Price in ETH</Text>
+                    </Box>
+                   
+                   <Box>
+                   <Text>Club Price in ETH</Text>
                     <Input   {...register("club_price", { pattern: /^\d+([.]\d{1,18})?$/, required: true })} defaultValue="0.000000000000000001" placeholder="0.000000000000000001" label="Sale value in ETH" type="text" />
                     {errors.value && <Text color="red.300" fontSize="15">Select a value bigger than 0.000000000000000001 for club price</Text>}
 
+                   </Box>
+                   
 
-                    <Button size="lg" colorScheme="cyan" type="submit">Create my Token</Button>
 
-                </VStack>
+                </Grid>
+                <Button  mt="5" size="lg" colorScheme="cyan" type="submit">Create my Token</Button>
+
+                </Box>
+                
 
             </VStack>
         </Box>
