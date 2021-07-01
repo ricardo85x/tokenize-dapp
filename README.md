@@ -14,7 +14,7 @@ The folowing items was modified from the Udemy course:
  - It is using **solidity 0.8.0**
  - it is using **NextJs** with **typescript** instead of React with javascript
  - it is using **hardhat** instead of truffle
- - was added new features to smart contracts and dapp.
+ - was added new features to smart contracts and dapp like your can create your own token and becomes admin
 
 Live demo:
 
