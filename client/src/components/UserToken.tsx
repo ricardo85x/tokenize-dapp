@@ -65,9 +65,9 @@ export function UserToken() {
 
     return (
         <Box  mx="5"  w="100%"  backgroundColor="gray.800" borderRadius="10" p="5">
-            <VStack mx="5" spacing="5" align="flex-start" >
+            <VStack mx="5" spacing="5" align={["center","flex-start","flex-start"]} >
 
-                <Text fontWeight="bold"  color="cyan.400">Create your own Token!</Text>
+                <Text fontSize={["28","34","34"]} fontWeight="bold"  color="cyan.400">Create your own Token!</Text>
                 
                 <Box fontSize="25"  mx="10" as="form" onSubmit={handleSubmit(handleCreateToken)} >
                 <Grid  templateColumns={["repeat(1,1fr)","repeat(2,1fr)","repeat(3,1fr)"]} gridGap="5" align="flex-start">

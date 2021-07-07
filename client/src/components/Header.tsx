@@ -35,17 +35,11 @@ export function Header({ back }: HeaderProps) {
 
         
         <Box
-
             mt="5"
             bg="cyan.800"
             width="100%"
-            
             align="center"
-
             maxW={1050}
-
-            borderRadius="10"
-
             
         >
             <Flex
