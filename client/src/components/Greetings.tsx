@@ -14,6 +14,7 @@ export function Greetings() {
     }
 
     return (
-        <Text ml="65" fontWeight="bold" color="yellowgreen">{message}</Text>
+        <Text  mx="5"
+        px="5" fontWeight="bold" color="yellowgreen">{message}</Text>
     )
 }

@@ -28,17 +28,23 @@ export function Header({ back }: HeaderProps) {
     } = useBaseContext()
 
     const address = accounts ?
-        `${accounts[0].substr(0, 5)}...${accounts[0].substr(-5)}` :
-        "0x000...0000"
+        `${accounts[0].substr(0, 2)}..${accounts[0].substr(-3)}` :
+        "0x..000"
 
     return (
 
         
         <Box
+
+            mt="5"
             bg="cyan.800"
             width="100%"
             
             align="center"
+
+            maxW={1050}
+
+            borderRadius="10"
 
             
         >
@@ -47,6 +53,7 @@ export function Header({ back }: HeaderProps) {
                 my="15"
                 align="center"
                 maxW={1050}
+                flexWrap="wrap"
            
                 mx="5"
                 px="5"
@@ -56,7 +63,7 @@ export function Header({ back }: HeaderProps) {
 
 
                     {back && (<NextLink href="/"><Link ml="-7" mr="5" > <Image size="25px" as={FiChevronLeft} /></Link></NextLink>)}
-                    <Text fontSize="34" fontWeight="bold">{tokenSymbol} Token Sale</Text>
+                    <Text fontSize={["22","34"]} fontWeight="bold">{tokenSymbol} Token Sale</Text>
 
                 </HStack>
 
