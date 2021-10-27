@@ -64,7 +64,7 @@ export function UserToken() {
 
 
     return (
-        <Box  mx="5"  w="100%"  backgroundColor="gray.800" borderRadius="10" p="5">
+        <Box  mx="5"  w="100%"  bgGradient="linear(to-b, gray.700, gray.900)" borderRadius="10" p="5">
             <VStack mx="5" spacing="5" align={["center","flex-start","flex-start"]} >
 
                 <Text fontSize={["28","34","34"]} fontWeight="bold"  color="cyan.400">Create your own Token!</Text>

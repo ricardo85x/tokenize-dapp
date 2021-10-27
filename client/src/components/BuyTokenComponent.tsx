@@ -56,7 +56,7 @@ export function BuyTokenComponent() {
       w="100%"      
       // maxW="500px" 
       
-      backgroundColor="gray.800" borderRadius="10" p="5">
+      bgGradient="linear(to-b, gray.700, gray.900)"  borderRadius="10" p="5">
       
       <Text mx="5" fontWeight="bold" color="cyan.400">Token {tokenSymbol}</Text>
 

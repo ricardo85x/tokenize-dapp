@@ -42,12 +42,10 @@ export function HomeComponent({ isUserToken = false }: HomeComponentProps) {
     return (
         <Flex
             w="100%"
-            h="100vh"
+            h="100%"
             mh="auto"
             direction="column"
             align="center"
-
-
         >
             
             <Header back={isUserToken} />
@@ -56,7 +54,7 @@ export function HomeComponent({ isUserToken = false }: HomeComponentProps) {
                 <Greetings />
             </Box>
 
-            <VStack maxW={1050} w="100%"  p="2" fontSize="34" m="5" spacing="10"  align="center">
+            <VStack  maxW={1050} w="100%"  p="2" fontSize="34" m="5" spacing="10"  align="center">
 
                 {!isUserToken && <UserToken />}
 

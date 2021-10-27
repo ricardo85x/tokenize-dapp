@@ -30,7 +30,7 @@ export function MineTokenComponent() {
   }
 
   return (
-    <Box mx="5"   w="100%"  backgroundColor="gray.800" borderRadius="10" p="5">
+    <Box mx="5"   w="100%"  bgGradient="linear(to-b, gray.700, gray.900)"  borderRadius="10" p="5">
       <VStack mx="5" spacing="5" align="flex-start">
 
         <Text fontWeight="bold"  color="cyan.400" >Mint {tokenSymbol} Token!</Text>
